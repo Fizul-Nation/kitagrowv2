@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KitaGrow Community — Elite Business Community</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-blue: #00d4ff;
+            --neon-blue-dark: #0099cc;
+            --neon-glow: rgba(0, 212, 255, 0.6);
+            --bg-dark: #0a0e17;
+            --bg-card: #0d1320;
+            --bg-card-hover: #111827;
+            --text-primary: #ffffff;
+            --text-secondary: #8b9cb8;
+            --border-color: rgba(0, 212, 255, 0.15);
+            --gradient-neon: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Particle Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Grid Overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(10, 14, 23, 0.95) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px var(--neon-glow);
+        }
+
+        .logo span {
+            color: var(--neon-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-neon);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: transparent;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 0.7rem 1.8rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-neon);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-cta:hover {
+            color: var(--bg-dark);
+            box-shadow: 0 0 30px var(--neon-glow);
+        }
+
+        .nav-cta:hover::before {
+            left: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
+            z-index: 10;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--neon-blue);
+            margin-bottom: 2rem;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.4); }
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #00d4ff 50%, #ffffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-neon);
+            color: var(--bg-dark);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 5rem;
+            flex-wrap: wrap;
+            padding: 0 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            position: relative;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+            text-shadow: 0 0 30px var(--neon-glow);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            padding: 6rem 5%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .level-progress {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-progress::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-neon);
+        }
+
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .level-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .level-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--bg-dark);
+        }
+
+        .level-info h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+        }
+
+        .level-info span {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .xp-display {
+            text-align: right;
+        }
+
+        .xp-current {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+        }
+
+        .xp-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-bar-container {
+            background: rgba(0, 212, 255, 0.1);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-neon);
+            border-radius: 6px;
+            width: 0;
+            transition: width 2s ease-out;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-milestones {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .milestone {
+            text-align: center;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .milestone.reached {
+            opacity: 1;
+        }
+
+        .milestone-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--border-color);
+            border-radius: 50%;
+            margin: 0 auto 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .milestone.reached .milestone-dot {
+            background: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-glow);
+        }
+
+        .milestone span {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Achievements */
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 4rem auto 0;
+        }
+
+        .achievement {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .achievement:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 212, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .achievement-info h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .achievement-info span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .achievement.unlocked .achievement-icon {
+            background: var(--gradient-neon);
+        }
+
+        .achievement.unlocked .achievement-icon svg {
+            color: var(--bg-dark);
+        }
+
+        .achievement.locked {
+            opacity: 0.5;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 6rem 5%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--border-color);
+            transition: background 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-blue);
+        }
+
+        .pricing-card:hover::before {
+            background: var(--gradient-neon);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--neon-blue);
+            transform: scale(1.02);
+        }
+
+        .pricing-card.featured::before {
+            background: var(--gradient-neon);
+            height: 4px;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: -2rem;
+            background: var(--gradient-neon);
+            color: var(--bg-dark);
+            padding: 0.3rem 2.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transform: rotate(45deg);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .plan-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-price {
+            margin-bottom: 2rem;
+        }
+
+        .price-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+            text-shadow: 0 0 30px var(--neon-glow);
+        }
+
+        .price-period {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .plan-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-check {
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 212, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-check svg {
+            width: 12px;
+            height: 12px;
+            color: var(--neon-blue);
+        }
+
+        .plan-cta {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .pricing-card.featured .plan-cta {
+            background: var(--gradient-neon);
+            color: var(--bg-dark);
+        }
+
+        .pricing-card:not(.featured) .plan-cta {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .pricing-card:not(.featured) .plan-cta:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .pricing-card.featured .plan-cta:hover {
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 5%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--bg-dark);
+        }
+
+        .testimonial-info h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+        }
+
+        .testimonial-info span {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .testimonial-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .testimonial-revenue {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--border-color);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            color: var(--neon-blue);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid var(--border-color);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .footer-links h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: fixed;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.5;
+        }
+
+        .float-1 {
+            top: 20%;
+            left: 5%;
+            width: 100px;
+            height: 100px;
+            border: 1px solid var(--border-color);
+            transform: rotate(45deg);
+            animation: float1 6s ease-in-out infinite;
+        }
+
+        .float-2 {
+            bottom: 30%;
+            right: 8%;
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 50%;
+            animation: float2 8s ease-in-out infinite;
+        }
+
+        .float-3 {
+            top: 60%;
+            left: 3%;
+            width: 8px;
+            height: 8px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--neon-glow);
+            animation: float3 5s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: rotate(45deg) translateY(0); }
+            50% { transform: rotate(45deg) translateY(-20px); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.1); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-50px); opacity: 1; }
+        }
+
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mouse Glow */
+        .mouse-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 2;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Hero Fade In Animation */
+        .hero-content .badge,
+        .hero-content h1,
+        .hero-content p,
+        .hero-content .hero-buttons {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .hero-content .badge { animation-delay: 0.1s; }
+        .hero-content h1 { animation-delay: 0.3s; }
+        .hero-content p { animation-delay: 0.5s; }
+        .hero-content .hero-buttons { animation-delay: 0.7s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats {
+                gap: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .level-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .xp-display {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <div class="grid-overlay"></div>
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <div class="floating-element float-1"></div>
+    <div class="floating-element float-2"></div>
+    <div class="floating-element float-3"></div>
+
+    <nav>
+        <div class="logo">Kita<span>Grow</span></div>
+        <ul class="nav-links">
+            <li><a href="#progress">Progress</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#testimonials">Success Stories</a></li>
+        </ul>
+        <button class="nav-cta">Join Now</button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Trusted by Many Young Entrepreneurs
+            </div>
+            <h1>KitaGrow Community</h1>
+            <p>Community That Develop Youth Through Entrepreneurship. Join an elite community of entrepreneurs. Unlock exclusive resources, mastermind groups, and proven frameworks to scale your business.</p>
+            <div class="hero-buttons">
+                <a href="#pricing" class="btn-primary">Choose Your Plan</a>
+                <a href="#testimonials" class="btn-secondary">See Success Stories</a>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item reveal">
+                    <div class="stat-value" data-target="2847">0</div>
+                    <div class="stat-label">Active Members</div>
+                </div>
+                <div class="stat-item reveal">
+                    <div class="stat-value" data-target="127" data-prefix="$" data-suffix="M">0</div>
+                    <div class="stat-label">Combined Revenue</div>
+                </div>
+                <div class="stat-item reveal">
+                    <div class="stat-value" data-target="94">0</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="progress-section" id="progress">
+        <div class="section-header reveal">
+            <h2>Your Progress Unlocked</h2>
+            <p>Track your entrepreneurial journey with our gamified progression system</p>
+        </div>
+
+        <div class="level-progress reveal">
+            <div class="level-header">
+                <div class="level-title">
+                    <div class="level-icon">12</div>
+                    <div class="level-info">
+                        <h3>Serial Entrepreneur</h3>
+                        <span>Current Rank</span>
+                    </div>
+                </div>
+                <div class="xp-display">
+                    <div class="xp-current">12,450 XP</div>
+                    <div class="xp-label">Experience Points</div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" data-width="72"></div>
+            </div>
+            <div class="progress-milestones">
+                <div class="milestone reached">
+                    <div class="milestone-dot"></div>
+                    <span>Beginner</span>
+                </div>
+                <div class="milestone reached">
+                    <div class="milestone-dot"></div>
+                    <span>Founder</span>
+                </div>
+                <div class="milestone reached">
+                    <div class="milestone-dot"></div>
+                    <span>Scaler</span>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-dot"></div>
+                    <span>Mogul</span>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-dot"></div>
+                    <span>Tycoon</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="achievements">
+            <div class="achievement unlocked reveal">
+                <div class="achievement-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    </svg>
+                </div>
+                <div class="achievement-info">
+                    <h4>First Sale</h4>
+                    <span>Completed your first transaction</span>
+                </div>
+            </div>
+            <div class="achievement unlocked reveal">
+                <div class="achievement-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="achievement-info">
+                    <h4>Team Builder</h4>
+                    <span>Scaled to 5+ team members</span>
+                </div>
+            </div>
+            <div class="achievement unlocked reveal">
+                <div class="achievement-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <div class="achievement-info">
+                    <h4>Revenue Crusher</h4>
+                    <span>Hit $10K monthly revenue</span>
+                </div>
+            </div>
+            <div class="achievement locked reveal">
+                <div class="achievement-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </div>
+                <div class="achievement-info">
+                    <h4>7-Figure Club</h4>
+                    <span>Reach $1M annual revenue</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+        <div class="section-header reveal">
+            <h2>Choose Your Growth Plan</h2>
+            <p>Select the perfect plan to start your entrepreneurial transformation</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card reveal">
+                <div class="plan-name">Starter Session</div>
+                <div class="plan-desc">Perfect for getting started</div>
+                <div class="plan-price">
+                    <span class="price-value">RM15</span>
+                    <span class="price-period">/session</span>
+                </div>
+                <ul class="plan-features">
+                    <li>
+                        <span class="feature-check">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        1 time sharing session
+                    </li>
+                    <li style="opacity: 0.5;">
+                        <span class="feature-check" style="background: rgba(239, 68, 68, 0.2); border-radius: 50%;">
+                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: #ef4444;">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </span>
+                        <span style="text-decoration: line-through;">Life-time access to community</span>
+                    </li>
+                     <li style="opacity: 0.5;">
+                        <span class="feature-check" style="background: rgba(239, 68, 68, 0.2); border-radius: 50%;">
+                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: #ef4444;">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </span>
+                        <span style="text-decoration: line-through;">24/7 mentor support</span>
+                    </li>
+                </ul>
+                <a href="https://toyyibpay.com/KitaGrow-Starter-Session" target="_blank" class="plan-cta">Get Started</a>
+            </div>
+
+            <div class="pricing-card featured reveal">
+                <div class="featured-badge">Most Popular</div>
+                <div class="plan-name">Ultimate Package</div>
+                <div class="plan-desc">Complete transformation with unlimited access</div>
+                <div class="plan-price">
+                    <span class="price-value">RM50</span>
+                    <span class="price-period">/lifetime</span>
+                </div>
+                <ul class="plan-features">
+                    <li>
+                        <span class="feature-check">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        Unlimited monthly sharing session
+                    </li>
+                    <li>
+                        <span class="feature-check">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        Life-time access to private community
+                    </li>
+                    <li>
+                        <span class="feature-check">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        24/7 mentor support
+                    </li>
+                    <li>
+                        <span class="feature-check">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        Peer networking opportunities
+                    </li>
+                </ul>
+                <a href="https://toyyibpay.com/KitaGrow-Ultimate-Package" target="_blank" class="plan-cta">Go Ultimate</a>
+            </div>
+
+            <div class="pricing-card reveal">
+                <div class="plan-name">Premium Community</div>
+                <div class="plan-desc">Join an exclusive group of growth-minded individuals</div>
+                <div class="plan-price">
+                    <span class="price-value">RM40</span>
+                    <span class="price-period">/lifetime</span>
+                </div>
+                <ul class="plan-features">
+                    <li style="opacity: 0.5;">
+                        <span class="feature-check" style="background: rgba(239, 68, 68, 0.2); border-radius: 50%;">
+                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: #ef4444;">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </span>
+                        <span style="text-decoration: line-through;">Unlimited monthly sharing session</span>
+                    </li>
+                    <li>
+                        <span class="feature-check">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        Life-time access to private community
+                    </li>
+                    <li>
+                        <span class="feature-check">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        Peer networking opportunities
+                    </li>
+                </ul>
+                <a href="https://toyyibpay.com/KitaGrow-Premium-Community" target="_blank" class="plan-cta">Join Community</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="section-header reveal">
+            <h2>Member Success Stories</h2>
+            <p>Real results from young entrepreneurs who transformed their lives</p>
+        </div>
+
+        <div class="testimonial-grid">
+            <div class="testimonial-card reveal">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">B</div>
+                    <div class="testimonial-info">
+                        <h4>Brofizul</h4>
+                        <span>Educational Influencer</span>
+                    </div>
+                </div>
+                <p class="testimonial-content">"Komuniti yang sangat senpoi! Sentiasa memberikan nasihat dan semangat dalam dunia bisnes. Alhamdulillah, sales daripada tiktok affiliate saya sudah semakin konsisten sejak saya join KitaGrow Komuniti."</p>
+                <span class="testimonial-revenue">TikTok Affiliate Success</span>
+            </div>
+
+            <div class="testimonial-card reveal">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">M</div>
+                    <div class="testimonial-info">
+                        <h4>Mohd Ghazali</h4>
+                        <span>Owner Kedai Makan</span>
+                    </div>
+                </div>
+                <p class="testimonial-content">"Alhamdulillah! Setelah sekian lama akhirnya saya berjaya buka kedai makan sendiri! Impian saya akhirnya tercapai."</p>
+                <span class="testimonial-revenue">Business Owner</span>
+            </div>
+
+            <div class="testimonial-card reveal">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">F</div>
+                    <div class="testimonial-info">
+                        <h4>Faris Safri</h4>
+                        <span>Student</span>
+                    </div>
+                </div>
+                <p class="testimonial-content">"Baru je masuk dah dapat return on investment balik! Guidance daripada Bro Aiman memang tip top! Macam-macam produk boleh dijual."</p>
+                <span class="testimonial-revenue">ROI Achieved</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Kita<span style="color: var(--neon-blue);">Grow</span></h3>
+                <p>Community That Develop Youth Through Entrepreneurship.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#progress">Progress</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#testimonials">Success Stories</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Templates</a></li>
+                    <li><a href="#">Guides</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Privacy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>2025 KitaGrow Community. All rights reserved.</p>
+            <p>Designed for entrepreneurs, by entrepreneurs.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Particle System
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+
+                // Mouse interaction
+                if (mouse.x !== null && mouse.y !== null) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 150) {
+                        const force = (150 - distance) / 150;
+                        this.x -= dx * force * 0.02;
+                        this.y -= dy * force * 0.02;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(0, 212, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.min(100, Math.floor((canvas.width * canvas.height) / 15000));
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 120) {
+                        const opacity = (120 - distance) / 120 * 0.15;
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // Mouse tracking
+        document.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+
+            const glow = document.getElementById('mouseGlow');
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+
+        // Scroll reveal
+        const revealElements = document.querySelectorAll('.reveal');
+
+        function checkReveal() {
+            revealElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+
+                if (elementTop < windowHeight - 100) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkReveal);
+        checkReveal();
+
+        // Counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-value[data-target]');
+
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const prefix = counter.getAttribute('data-prefix') || '';
+                const suffix = counter.getAttribute('data-suffix') || '';
+                const duration = 2000;
+                const startTime = performance.now();
+
+                function updateCounter(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                    const current = Math.floor(easeOutQuart * target);
+
+                    counter.textContent = prefix + current.toLocaleString() + suffix;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    }
+                }
+
+                requestAnimationFrame(updateCounter);
+            });
+        }
+
+        // Progress bar animation
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-bar[data-width]');
+
+            progressBars.forEach(bar => {
+                const width = bar.getAttribute('data-width');
+                setTimeout(() => {
+                    bar.style.width = width + '%';
+                }, 500);
+            });
+        }
+
+        // Trigger animations when stats section is visible
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    animateProgressBars();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+
+        const progressSection = document.querySelector('.progress-section');
+        if (progressSection) {
+            statsObserver.observe(progressSection);
+        }
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
