@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KitaGrow Community — Elite Business Community</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
     <style>
         * {
             margin: 0;
@@ -739,16 +734,15 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Updated Avatar CSS for Images */
         .testimonial-avatar {
-            width: 50px;
-            height: 50px;
-            background: var(--gradient-neon);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            color: var(--bg-dark);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%; /* Makes it a circle */
+            object-fit: cover; /* Ensures the image doesn't distort */
+            border: 2px solid var(--neon-blue); /* Adds a neon border */
+            box-shadow: 0 0 15px var(--neon-glow); /* Adds a glow effect */
+            background-color: var(--bg-card-hover); /* Fallback background */
         }
 
         .testimonial-info h4 {
@@ -1020,11 +1014,11 @@
 
             <div class="stats">
                 <div class="stat-item reveal">
-                    <div class="stat-value" data-target="2847">0</div>
+                    <div class="stat-value" data-target="27">0</div>
                     <div class="stat-label">Active Members</div>
                 </div>
                 <div class="stat-item reveal">
-                    <div class="stat-value" data-target="127" data-prefix="$" data-suffix="M">0</div>
+                    <div class="stat-value" data-target="100" data-prefix="$" data-suffix="K">0</div>
                     <div class="stat-label">Combined Revenue</div>
                 </div>
                 <div class="stat-item reveal">
@@ -1272,7 +1266,8 @@
         <div class="testimonial-grid">
             <div class="testimonial-card reveal">
                 <div class="testimonial-header">
-                    <div class="testimonial-avatar">B</div>
+                    <!-- Changed to img tag with placeholder. Replace src with actual image URL -->
+                    <img src="https://placehold.co/100x100/0d1320/00d4ff?text=B" alt="Brofizul" class="testimonial-avatar">
                     <div class="testimonial-info">
                         <h4>Brofizul</h4>
                         <span>Educational Influencer</span>
@@ -1284,7 +1279,8 @@
 
             <div class="testimonial-card reveal">
                 <div class="testimonial-header">
-                    <div class="testimonial-avatar">M</div>
+                    <!-- Changed to img tag with placeholder. Replace src with actual image URL -->
+                    <img src="https://placehold.co/100x100/0d1320/00d4ff?text=M" alt="Mohd Ghazali" class="testimonial-avatar">
                     <div class="testimonial-info">
                         <h4>Mohd Ghazali</h4>
                         <span>Owner Kedai Makan</span>
@@ -1296,7 +1292,8 @@
 
             <div class="testimonial-card reveal">
                 <div class="testimonial-header">
-                    <div class="testimonial-avatar">F</div>
+                    <!-- Changed to img tag with placeholder. Replace src with actual image URL -->
+                    <img src="https://placehold.co/100x100/0d1320/00d4ff?text=F" alt="Faris Safri" class="testimonial-avatar">
                     <div class="testimonial-info">
                         <h4>Faris Safri</h4>
                         <span>Student</span>
